@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      target: app
+      args:
+        RUN_PATH: app/main.py
+    env_file:
+      - envs/integration.env
+    environment:
+      - LOG_LEVEL=INFO
+    tty: true
+    stdin_open: true
+    volumes:
+      - "./app:/app"
+    networks:
+      - signal-atak-net
+    depends_on:
+      - signal-api
+
+  signal-api:
+    image: bbernhard/signal-cli-rest-api:latest
+    container_name: signal-api
+    environment:
+      - MODE=json-rpc
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./signal-data:/home/.local/share/signal-cli
+    restart: unless-stopped
+    networks:
+      - signal-atak-net
+
+networks:
+  signal-atak-net:
+    driver: bridge

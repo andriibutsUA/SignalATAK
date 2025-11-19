@@ -1,0 +1,2 @@
+class ATAKException(Exception):
+    pass

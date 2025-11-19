@@ -1,0 +1,10 @@
+.venv
+*.pyc
+.DS_Store
+test-results.xml
+junit-tests-results.xml
+coverage.xml
+.coverage
+.idea
+envs/prod.env
+signal-data/
