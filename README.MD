@@ -1,4 +1,4 @@
-
+![](https://github.com/andriibutsUA/SignalATAK/blob/main/SignalAtak.gif?raw=true)
 ## Prerequisites
 
 - Docker and Docker Compose
