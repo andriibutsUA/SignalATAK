@@ -5,6 +5,24 @@
 - Signal account (for bot)
 - ATAK or WinTAK installed and configured to receive UDP CoT messages on port 4242
 
+## Quick Start
+
+```bash
+# 1. Configure environment
+edit envs/integration.env  # Set ATAK_HOST and BOT_PHONE
+
+# 2. Initial setup (first time only)
+make setup    # Link Signal account
+make verify   # Verify the link
+
+# 3. Run the bot
+make run      # Run in foreground, or
+make run-d    # Run in detached mode
+
+# 4. See all commands
+make help
+```
+
 ## Setup
 
 ### 1. Clone the Repository
@@ -39,54 +57,67 @@ ATAK_TIMEOUT=5
 
 The Signal CLI needs to be linked to your Signal account via QR code.
 
-**Step 1:** Start signal-api in normal mode:
+**Using Makefile (recommended):**
 
 ```bash
-MODE=normal docker compose up signal-api
+make setup
 ```
 
-**Step 2:** Open your browser and navigate to:
-
-```
-http://127.0.0.1:8080/v1/qrcodelink?device_name=signal-atak-bot
-```
-
-**Step 3:** In your Signal mobile app:
-- Open Settings → Linked Devices
-- Tap "+" or "Link New Device"
-- Scan the QR code displayed in your browser
-
-**Step 4:** Wait for confirmation, then stop the container (Ctrl+C)
-
-**Step 5:** Verify the link by checking:
-
-```
-http://127.0.0.1:8080/v1/about
-```
-
-Your account should be listed.
+This will start the Signal API and display instructions. Follow the prompts to link your account, then verify:
 
 ## Running the Bot
 
-### Start All Services
+### Quick Start with Makefile
 
+**Run in foreground (see logs):**
+```bash
+make run
+```
+
+**Run in detached mode:**
+```bash
+make run-d
+```
+
+**View logs (when running detached):**
+```bash
+make logs
+```
+
+**Stop services:**
+```bash
+make stop
+```
+
+**See all available commands:**
+```bash
+make help
+```
+
+### Manual Docker Compose Commands
+
+<details>
+<summary>Click to expand manual commands</summary>
+
+**Start all services:**
 ```bash
 docker compose up
 ```
 
-Or run in detached mode:
-
+**Run in detached mode:**
 ```bash
 docker compose up -d
 ```
 
-### Stop Services
+**Stop services:**
 
 Press `Ctrl+C` if running in foreground, or:
 
 ```bash
 docker compose down
 ```
+
+</details>
 
 ## Usage
 
@@ -165,20 +196,26 @@ Make sure UDP port 4242 is allowed through your firewall:
 
 ### Scenario 1: Mac\Linux → Windows PC with WinTAK
 
-**On Mac:**
-```bash
-# envs/integration.env
-ATAK_HOST=192.168.0.157  # Windows PC's IP address
+**On Mac/Linux:**
+1. Edit `envs/integration.env`:
+   ```bash
+   ATAK_HOST=192.168.0.157  # Windows PC's IP address
+   ```
 
-docker compose up
-```
+2. Run the bot:
+   ```bash
+   make run
+   ```
 
 ### Scenario 2: Windows with WinTAK (localhost)
 
 **On Windows:**
-```bash
-# envs/integration.env
-ATAK_HOST=192.168.0.157  # Your own IP (or host.docker.internal)
+1. Edit `envs/integration.env`:
+   ```bash
+   ATAK_HOST=192.168.0.157  # Your own IP (or host.docker.internal)
+   ```
 
-docker compose up
-```
+2. Run the bot:
+   ```bash
+   make run
+   ```
