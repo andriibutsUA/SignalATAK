@@ -4,8 +4,8 @@ from dataclasses import dataclass
 
 @dataclass
 class SignalConfig:
-    signal_service_host: str = os.environ.get("SIGNAL_SERVICE_HOST")
-    signal_service_port: int = os.environ.get("SIGNAL_SERVICE_PORT")
+    signal_service_host: str = os.environ.get("SIGNAL_SERVICE_HOST", "signal-api")
+    signal_service_port: int = int(os.environ.get("SIGNAL_SERVICE_PORT", 8080))
     signal_bot_phone_number: str = os.getenv("SIGNAL_BOT_PHONE", "+380971111111")
 
     @property

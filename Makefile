@@ -1,4 +1,4 @@
-.PHONY: help setup verify run run-d stop logs clean
+.PHONY: help setup verify run run-d stop logs clean lint
 
 help:
 	@echo "SignalATAK Makefile Commands:"
@@ -9,6 +9,7 @@ help:
 	@echo "  make stop           - Stop all services"
 	@echo "  make logs           - View logs"
 	@echo "  make clean          - Stop and remove all containers and volumes"
+	@echo "  make lint           - Run code formatting and type checking"
 	@echo ""
 	@echo "Configuration:"
 	@echo "  Edit envs/integration.env to configure ATAK_HOST and BOT_PHONE"
@@ -51,3 +52,8 @@ logs:
 clean:
 	docker compose down -v
 	@echo "All containers and volumes removed"
+
+lint:
+	ruff format
+	ruff check --fix --select I
+	pyright

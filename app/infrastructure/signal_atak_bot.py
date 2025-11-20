@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import cast
 
 from signalbot import (
     Command,
@@ -24,7 +25,7 @@ MESSAGE_REGEX_PATTERN = (
 
 class HelpCommand(Command):
     @triggered("help", case_sensitive=False)
-    async def handle(self, c: Context) -> None:
+    async def handle(self, context: Context) -> None:
         text = (
             "Signal to ATAK Bot \n"
             "Send coordinates in this format: \n"
@@ -37,26 +38,26 @@ class HelpCommand(Command):
             "* help - Show this message\n"
         )
 
-        await c.send(text)
+        await context.send(text)
 
 
 class TypesCommand(Command):
     @triggered("types", case_sensitive=False)
-    async def handle(self, c: Context) -> None:
-        await c.send(", ".join(COT_TYPES.keys()))
+    async def handle(self, context: Context) -> None:
+        await context.send(", ".join(COT_TYPES.keys()))
 
 
 class ATAKCommand(Command):
     @regex_triggered(MESSAGE_REGEX_PATTERN)
-    async def handle(self, c: Context) -> None:
-        bot = c.bot
-        lat, lon, desc = bot.parse_message(c.message.text)
+    async def handle(self, context: Context) -> None:
+        bot = cast(SignalATAKBot, context.bot)
+        lat, lon, desc = bot.parse_message(context.message.text)
 
         try:
             await bot.send_to_atak(lat, lon, desc)
-            await c.send("Data sent to ATAK")
+            await context.send("Data sent to ATAK")
         except ATAKException:
-            await c.send("Could not send message to ATAK, contact administrator")
+            await context.send("Could not send message to ATAK, contact administrator")
 
 
 class SignalATAKBot(SignalBot):
@@ -66,16 +67,17 @@ class SignalATAKBot(SignalBot):
         signal_phone_number: str,
         atak_sender: ATAKSender,
     ) -> None:
-        super().__init__(
-            {
-                "signal_service": signal_service_connection,
-                "phone_number": signal_phone_number,
-            }
-        )
+        config: dict[str, str] = {
+            "signal_service": signal_service_connection,
+            "phone_number": signal_phone_number,
+        }
+        super().__init__(config)  # type: ignore[reportUnknownMemberType]
         self._atak_sender = atak_sender
 
     def parse_message(self, message: str) -> tuple[str, str, str]:
         match = re.match(MESSAGE_REGEX_PATTERN, message)
+        if not match:
+            raise ValueError(f"Invalid message format: {message}")
         lat, lon, desc = match.groups()
 
         return str(lat), str(lon), str(desc.strip())

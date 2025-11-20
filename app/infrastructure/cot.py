@@ -38,7 +38,7 @@ class CoTMessage:
         if not self._cot_type:
             raise ValueError("CoT type must be set")
 
-        if self._latitude is None or self._longitude is None:
+        if not self._latitude or not self._longitude:
             raise ValueError("Location (lat/lon) must be set")
 
         uid = f"SIGBOT-{uuid.uuid4()}"
