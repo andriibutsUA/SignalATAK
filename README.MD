@@ -9,14 +9,13 @@
 
 ```bash
 # 1. Configure environment
-edit envs/integration.env  # Set ATAK_HOST and BOT_PHONE
+edit envs/integration.env
 
 # 2. Initial setup (first time only)
-make setup    # Link Signal account
-make verify   # Verify the link
+make setup
 
 # 3. Run the bot
-make run      # Run in foreground, or
+make run
 make run-d    # Run in detached mode
 
 # 4. See all commands
@@ -37,12 +36,10 @@ cd SignalATAK
 Edit `envs/integration.env`:
 
 ```bash
-# Signal Configuration
 SIGNAL_SERVICE_HOST=signal-api
 SIGNAL_SERVICE_PORT=8080
 BOT_PHONE=+380971111111 # you can send to yourself
 
-# ATAK Configuration
 ATAK_HOST=192.168.0.157  # IP address of ATAK/WinTAK machine
 ATAK_PORT=4242
 ATAK_TIMEOUT=5
@@ -181,8 +178,7 @@ LAT LON DESCRIPTION
 
 **In WinTAK:**
 1. Settings → Network Preferences → Network Connections
-2. Add a new UDP input on port 4242
-3. Set to "Listen on all interfaces" or specific IP
+2. Add a new UDP input on port 4242 (udp://0:4242)
 
 **In ATAK:**
 1. Settings → Network Preferences → Input
@@ -199,7 +195,7 @@ Make sure UDP port 4242 is allowed through your firewall:
 **On Mac/Linux:**
 1. Edit `envs/integration.env`:
    ```bash
-   ATAK_HOST=192.168.0.157  # Windows PC's IP address
+   ATAK_HOST=192.168.0.157  # Windows PC's or Android Phone's IP address
    ```
 
 2. Run the bot:
